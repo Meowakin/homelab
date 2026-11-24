@@ -1,0 +1,27 @@
+{
+  "name": "homelab-ansible",
+  "build": {
+    "dockerfile": "../Dockerfile",
+    "context": ".."
+  },
+  "workspaceMount": "source=${localWorkspaceFolder},target=/work,type=bind",
+  "workspaceFolder": "/work",
+  "mounts": [
+    "source=${localEnv:USERPROFILE}${localEnv:HOME}/.ssh/ansible_homelab,target=/tmp/ansible_key,type=bind,readonly"
+  ],
+  "remoteEnv": {
+    "ANSIBLE_CONFIG": "/work/ansible.cfg"
+  },
+  "postStartCommand": "mkdir -p /root/.ssh && cp /tmp/ansible_key /root/.ssh/id_ed25519 && chmod 600 /root/.ssh/id_ed25519",
+  "customizations": {
+    "vscode": {
+      "extensions": ["redhat.ansible"],
+      "settings": {
+        "ansible.python.interpreterPath": "/usr/local/bin/python3",
+        "files.associations": {
+          "**/ansible/*.yml": "ansible"
+        }
+      }
+    }
+  }
+}
